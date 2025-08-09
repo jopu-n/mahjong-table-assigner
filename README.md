@@ -1,2 +1,2 @@
-!\[Claude my beloved](assets/mybeloved.gif)
+![Claude my beloved](assets/mybeloved.gif)
 
