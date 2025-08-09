@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahjong Table Assignment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 8px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .content {
+            padding: 15px;
+            padding-bottom: 10px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            margin-top: 8px;
+        }
+
+        .player-list {
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .player-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .player-item:hover {
+            background: #f0f0f0;
+        }
+
+        .player-name {
+            font-size: 14px;
+            color: #333;
+            flex: 1;
+        }
+
+        .player-badges {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .badge {
+            padding: 3px 6px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-priority {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .badge-practice {
+            background: #90EE90;
+            color: #333;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 11px;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
+        }
+
+        .delete-btn {
+            padding: 5px 10px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Results */
+        .results {
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-assignment {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .table-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+        }
+
+        .table-players {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .table-player {
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wind-icon {
+            width: 20px;
+            height: 25px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .player-name-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .practice-table {
+            background: #e8f5e9;
+        }
+
+        .practice-table .table-number {
+            background: #90EE90;
+            color: #333;
+            font-size: 11px;
+        }
+
+        .leftout-section {
+            background: #fff3cd;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .leftout-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .leftout-players {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .leftout-player {
+            background: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            border: 1px solid #ffc107;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+        }
+
+        .no-players {
+            text-align: center;
+            color: #999;
+            padding: 15px;
+            font-size: 13px;
+        }
+
+        .footer {
+            padding: 8px 20px;
+            text-align: center;
+            font-size: 10px;
+            color: #999;
+            background: #f8f8f8;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🀄 Mahjong Table Assigner</h1>
+        </div>
+
+        <div class="content">
+            <!-- Input Section -->
+            <div class="section" id="inputSection">
+                <div class="section-title">Add players</div>
+                <div class="input-group">
+                    <input type="text" id="playerInput" placeholder="Player name..." maxlength="30">
+                    <button class="btn" onclick="addPlayer()">Add</button>
+                </div>
+
+                <div class="toggle-container">
+                    <span class="toggle-label">Practice table</span>
+                    <div class="toggle-switch" id="practiceToggle" onclick="togglePractice()">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+
+                <div class="section-title">Players (<span id="playerCount">0</span>)</div>
+                <div class="player-list" id="playerList">
+                    <div class="no-players">No players added</div>
+                </div>
+
+                <button class="btn btn-generate" onclick="prepareGeneration()">
+                    Generate table assignment
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results" id="resultsSection">
+                <div id="tableAssignments"></div>
+                <button class="btn btn-secondary" onclick="resetApp()" style="width: 100%; margin-top: 12px;">
+                    New assignment
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            Wind tiles by <a href="https://martinpersson.org/" target="_blank">Martin Persson</a>
+        </div>
+    </div>
+
+    <!-- Practice Table Selection Modal -->
+    <div class="modal" id="practiceModal">
+        <div class="modal-content">
+            <div class="modal-title">Select practice table players</div>
+            <div id="practicePlayerList"></div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closePracticeModal()">Cancel</button>
+                <button class="btn" onclick="generateWithPractice()">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let players = [];
+        let practiceMode = false;
+        let practiceTablePlayers = [];
+
+        // Wind positions (East, South, West, North - standard mahjong seating order)
+        // For 3-player games (sanma), North is excluded
+        const windPositions = [
+            { name: 'East', file: 'assets/wind-east.png' },
+            { name: 'South', file: 'assets/wind-south.png' },
+            { name: 'West', file: 'assets/wind-west.png' },
+            { name: 'North', file: 'assets/wind-north.png' }
+        ];
+
+        function addPlayer() {
+            const input = document.getElementById('playerInput');
+            const name = input.value.trim();
+            
+            if (name && players.length < 20) {
+                // Check for duplicate names
+                if (players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+                    alert(`Player "${name}" already exists!`);
+                    return;
+                }
+                
+                players.push({
+                    name: name,
+                    priority: false,
+                    practice: false
+                });
+                input.value = '';
+                renderPlayers();
+            }
+        }
+
+        function renderPlayers() {
+            const list = document.getElementById('playerList');
+            const count = document.getElementById('playerCount');
+            count.textContent = players.length;
+
+            if (players.length === 0) {
+                list.innerHTML = '<div class="no-players">No players added</div>';
+                return;
+            }
+
+            list.innerHTML = players.map((player, index) => `
+                <div class="player-item">
+                    <span class="player-name">${player.name}</span>
+                    <div class="player-badges">
+                        ${player.priority ? '<span class="badge badge-priority">Priority</span>' : ''}
+                        <label class="checkbox-label">
+                            <input type="checkbox" ${player.priority ? 'checked' : ''} 
+                                   onchange="togglePriority(${index})">
+                            <span>Priority</span>
+                        </label>
+                        <button class="delete-btn" onclick="deletePlayer(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function togglePriority(index) {
+            players[index].priority = !players[index].priority;
+            renderPlayers();
+        }
+
+        function deletePlayer(index) {
+            players.splice(index, 1);
+            renderPlayers();
+        }
+
+        function togglePractice() {
+            practiceMode = !practiceMode;
+            const toggle = document.getElementById('practiceToggle');
+            toggle.classList.toggle('active');
+        }
+
+        function prepareGeneration() {
+            if (players.length < 4) {
+                alert('You need at least 4 players to create a table assignment!');
+                return;
+            }
+
+            if (practiceMode) {
+                showPracticeModal();
+            } else {
+                generateTables([]);
+            }
+        }
+
+        function showPracticeModal() {
+            const modal = document.getElementById('practiceModal');
+            const list = document.getElementById('practicePlayerList');
+            
+            practiceTablePlayers = [];
+            
+            list.innerHTML = `
+                <p style="font-size: 12px; color: #666; margin-bottom: 12px; text-align: center;">
+                    Select players who are practicing or volunteering for the practice table (remaining spots will be filled from leftovers)
+                </p>
+                ${players.map((player, index) => `
+                    <div class="player-item">
+                        <label class="checkbox-label" style="width: 100%;">
+                            <input type="checkbox" onchange="togglePracticePlayer(${index})">
+                            <span class="player-name">${player.name}</span>
+                        </label>
+                    </div>
+                `).join('')}
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function togglePracticePlayer(index) {
+            const player = players[index];
+            const idx = practiceTablePlayers.indexOf(player);
+            
+            if (idx > -1) {
+                practiceTablePlayers.splice(idx, 1);
+            } else {
+                if (practiceTablePlayers.length < 4) {
+                    practiceTablePlayers.push(player);
+                } else {
+                    alert('Practice table can have a maximum of 4 players marked!');
+                    event.target.checked = false;
+                }
+            }
+        }
+
+        function closePracticeModal() {
+            document.getElementById('practiceModal').style.display = 'none';
+        }
+
+        function generateWithPractice() {
+            if (practiceTablePlayers.length === 0) {
+                alert('Please select at least one player for the practice table!');
+                return;
+            }
+            closePracticeModal();
+            generateTables(practiceTablePlayers);
+        }
+
+        function generateTables(practiceTableMarkedPlayers) {
+            // First, remove practice-marked players from the available pool
+            let availablePlayers = players.filter(p => !practiceTableMarkedPlayers.includes(p));
+            
+            // Separate priority and normal players from the available pool
+            let priorityPlayers = availablePlayers.filter(p => p.priority);
+            let normalPlayers = availablePlayers.filter(p => !p.priority);
+            
+            // Calculate how many tables we can make
+            let maxTables = Math.floor(availablePlayers.length / 4);
+            
+            // If we have practice players, we need to ensure enough leftovers for a valid practice table
+            if (practiceTableMarkedPlayers.length > 0) {
+                let minLeftoversNeeded = Math.max(0, 3 - practiceTableMarkedPlayers.length);
+                
+                // Adjust max tables to ensure we have enough leftovers
+                while (maxTables > 0) {
+                    let leftoversIfMaxTables = availablePlayers.length - (maxTables * 4);
+                    if (leftoversIfMaxTables >= minLeftoversNeeded) {
+                        break; // We have enough leftovers
+                    }
+                    maxTables--; // Reduce tables to create more leftovers
+                }
+            }
+            
+            let spotsAvailable = maxTables * 4;
+            
+            // Ensure all priority players get spots
+            if (priorityPlayers.length > spotsAvailable) {
+                alert(`Warning: ${priorityPlayers.length} priority players but only ${spotsAvailable} table spots available!`);
+            }
+            
+            // Shuffle ALL players together
+            let allPlayersShuffled = shuffleArray([...availablePlayers]);
+            
+            // Now ensure priority players are within the table spots
+            // Find priority players in the shuffled list
+            let inTableRange = allPlayersShuffled.slice(0, spotsAvailable);
+            let outOfTableRange = allPlayersShuffled.slice(spotsAvailable);
+            
+            // Check if any priority players are out of range
+            let priorityOutOfRange = outOfTableRange.filter(p => p.priority);
+            let normalInRange = inTableRange.filter(p => !p.priority);
+            
+            // Swap priority players into table range if needed
+            for (let i = 0; i < priorityOutOfRange.length && i < normalInRange.length; i++) {
+                let priorityIndex = allPlayersShuffled.indexOf(priorityOutOfRange[i]);
+                let normalIndex = allPlayersShuffled.indexOf(normalInRange[i]);
+                
+                // Swap them
+                [allPlayersShuffled[priorityIndex], allPlayersShuffled[normalIndex]] = 
+                [allPlayersShuffled[normalIndex], allPlayersShuffled[priorityIndex]];
+            }
+            
+            // Create tables from the shuffled list
+            let tables = [];
+            let playersCopy = [...allPlayersShuffled];
+            while (playersCopy.length >= 4 && tables.length < maxTables) {
+                let table = playersCopy.splice(0, 4);
+                // Shuffle for random seating positions
+                tables.push(shuffleArray(table));
+            }
+            
+            // Remaining players become leftovers
+            let leftout = playersCopy;
+            
+            // Handle practice table if enabled
+            let practiceTable = [];
+            
+            if (practiceTableMarkedPlayers.length > 0) {
+                // Calculate total available for practice table
+                let totalAvailable = practiceTableMarkedPlayers.length + leftout.length;
+                
+                if (totalAvailable >= 3) {
+                    // We can form a practice table with 3 or 4 players
+                    practiceTable = [...practiceTableMarkedPlayers];
+                    
+                    // Fill up to 4 players total, but at least 3
+                    let spotsToFill = Math.min(4 - practiceTable.length, leftout.length);
+                    for (let i = 0; i < spotsToFill; i++) {
+                        practiceTable.push(leftout.shift());
+                    }
+                    
+                    // Shuffle for random seating
+                    tables.push(shuffleArray(practiceTable));
+                } else {
+                    // Not enough players to form a valid practice table (need at least 3)
+                    alert(`Cannot form practice table: only ${totalAvailable} players available (need at least 3). Practice players will be left out.`);
+                    leftout.unshift(...practiceTableMarkedPlayers);
+                }
+            }
+            
+            // Display results
+            displayResults(tables, leftout, practiceTable.length >= 3);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function displayResults(tables, leftout, hasPracticeTable) {
+            const resultsSection = document.getElementById('resultsSection');
+            const tableAssignments = document.getElementById('tableAssignments');
+            const inputSection = document.getElementById('inputSection');
+            
+            let html = '';
+            
+            tables.forEach((table, index) => {
+                const isPracticeTable = hasPracticeTable && index === tables.length - 1;
+                html += `
+                    <div class="table-assignment ${isPracticeTable ? 'practice-table' : ''}">
+                        <div class="table-title">
+                            <span class="table-number">
+                                ${isPracticeTable ? `Practice (${table.length}p)` : `Table ${index + 1}`}
+                            </span>
+                        </div>
+                        <div class="table-players">
+                            ${table.map((p, seatIndex) => `
+                                <div class="table-player">
+                                    <img src="${windPositions[seatIndex].file}" 
+                                         alt="${windPositions[seatIndex].name}" 
+                                         class="wind-icon"
+                                         title="${windPositions[seatIndex].name} seat">
+                                    <span class="player-name-text">${p.name}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (leftout.length > 0) {
+                html += `
+                    <div class="leftout-section">
+                        <div class="leftout-title">Left out</div>
+                        <div class="leftout-players">
+                            ${leftout.map(p => `<div class="leftout-player">${p.name}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            tableAssignments.innerHTML = html;
+            inputSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+        }
+
+        function resetApp() {
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            practiceTablePlayers = [];
+        }
+
+        // Allow Enter key to add player
+        document.getElementById('playerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addPlayer();
+            }
+        });
+    </script>
+</body>
+</html>
