@@ -488,6 +488,7 @@
         let players = [];
         let practiceMode = false;
         let practiceTablePlayers = [];
+        const MAX_PLAYERS = 32;
 
         // Wind positions (East, South, West, North - standard mahjong seating order)
         // For 3-player games (sanma), North is excluded
@@ -502,7 +503,7 @@
             const input = document.getElementById('playerInput');
             const name = input.value.trim();
             
-            if (name && players.length < 20) {
+            if (name && players.length < MAX_PLAYERS) {
                 // Check for duplicate names
                 if (players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
                     alert(`Player "${name}" already exists!`);
