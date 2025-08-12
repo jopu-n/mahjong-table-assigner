@@ -1,15 +1,15 @@
 const CACHE_NAME = 'mahjong-table-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/assets/icon-192.png',
-  '/assets/icon-512.png',
-  '/assets/wind-east.png',
-  '/assets/wind-south.png',
-  '/assets/wind-west.png',
-  '/assets/wind-north.png',
-  '/assets/dragon-haku.png'
+  '/mahjong-table-assigner/',
+  '/mahjong-table-assigner/index.html',
+  '/mahjong-table-assigner/manifest.json',
+  '/mahjong-table-assigner/assets/icon-192.png',
+  '/mahjong-table-assigner/assets/icon-512.png',
+  '/mahjong-table-assigner/assets/wind-east.png',
+  '/mahjong-table-assigner/assets/wind-south.png',
+  '/mahjong-table-assigner/assets/wind-west.png',
+  '/mahjong-table-assigner/assets/wind-north.png',
+  '/mahjong-table-assigner/assets/dragon-haku.png'
 ];
 
 // Install event - cache all needed files

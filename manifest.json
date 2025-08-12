@@ -2,7 +2,7 @@
   "name": "Mahjong Table Assigner",
   "short_name": "Mahjong Tables",
   "description": "Quickly assign players to mahjong tables with fair random seating",
-  "start_url": "/",
+  "start_url": "/mahjong-table-assigner/",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#667eea",
