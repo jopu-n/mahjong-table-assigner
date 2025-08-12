@@ -27,6 +27,13 @@
             overflow: hidden;
         }
 
+        /* Desktop styles */
+        @media (min-width: 768px) {
+            .container.showing-results {
+                max-width: 900px;
+            }
+        }
+
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -246,6 +253,19 @@
             animation: slideIn 0.5s ease;
         }
 
+        /* Desktop results layout */
+        @media (min-width: 768px) {
+            #tableAssignments {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .leftout-section {
+                grid-column: 1 / -1;
+            }
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -264,6 +284,14 @@
             margin-bottom: 10px;
         }
 
+        @media (min-width: 768px) {
+            .table-assignment {
+                margin-bottom: 0;
+                padding: 18px;
+                padding-bottom: 14px;
+            }
+        }
+
         .table-title {
             font-size: 13px;
             font-weight: 600;
@@ -274,12 +302,26 @@
             gap: 8px;
         }
 
+        @media (min-width: 768px) {
+            .table-title {
+                font-size: 18px;
+                margin-bottom: 14px;
+            }
+        }
+
         .table-number {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 3px 8px;
             border-radius: 15px;
             font-size: 11px;
+        }
+
+        @media (min-width: 768px) {
+            .table-number {
+                font-size: 15px;
+                padding: 5px 12px;
+            }
         }
 
         .table-players {
@@ -299,11 +341,26 @@
             gap: 6px;
         }
 
+        @media (min-width: 768px) {
+            .table-player {
+                padding: 14px;
+                font-size: 16px;
+                gap: 10px;
+            }
+        }
+
         .wind-icon {
             width: 20px;
             height: 25px;
             object-fit: contain;
             flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .wind-icon {
+                width: 36px;
+                height: 45px;
+            }
         }
 
         .player-name-text {
@@ -312,6 +369,12 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             font-size: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .player-name-text {
+                font-size: 16px;
+            }
         }
 
         .practice-table {
@@ -329,6 +392,13 @@
             border-radius: 12px;
             padding: 12px;
             margin-top: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .leftout-section {
+                margin-top: 0;
+                padding: 16px;
+            }
         }
 
         .leftout-title {
@@ -350,6 +420,30 @@
             border-radius: 8px;
             font-size: 13px;
             border: 1px solid #ffc107;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (min-width: 768px) {
+            .leftout-player {
+                padding: 8px 12px;
+                font-size: 15px;
+                gap: 8px;
+            }
+        }
+
+        .dragon-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        @media (min-width: 768px) {
+            .dragon-icon {
+                width: 30px;
+                height: 30px;
+            }
         }
 
         .modal {
@@ -468,7 +562,8 @@
         </div>
 
         <div class="footer">
-            Wind tiles by <a href="https://martinpersson.org/" target="_blank">Martin Persson</a>
+            Tiles by <a href="https://martinpersson.org/" target="_blank">Martin Persson</a> • 
+            <a href="https://github.com/jopu-n/mahjong-table-assigner" target="_blank">GitHub</a>
         </div>
     </div>
 
@@ -735,6 +830,10 @@
             const resultsSection = document.getElementById('resultsSection');
             const tableAssignments = document.getElementById('tableAssignments');
             const inputSection = document.getElementById('inputSection');
+            const container = document.querySelector('.container');
+            
+            // Add class to expand container on desktop
+            container.classList.add('showing-results');
             
             let html = '';
             
@@ -767,7 +866,7 @@
                     <div class="leftout-section">
                         <div class="leftout-title">Left out</div>
                         <div class="leftout-players">
-                            ${leftout.map(p => `<div class="leftout-player">${p.name}</div>`).join('')}
+                            ${leftout.map(p => `<div class="leftout-player"><img src="assets/dragon-haku.png" alt="Dragon" class="dragon-icon">${p.name}</div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -781,6 +880,8 @@
         function resetApp() {
             document.getElementById('inputSection').style.display = 'block';
             document.getElementById('resultsSection').style.display = 'none';
+            const container = document.querySelector('.container');
+            container.classList.remove('showing-results');
             practiceTablePlayers = [];
         }
 
